@@ -3,7 +3,7 @@ import random
 from selenium.webdriver.common.by import By
 
 from generator.generator import genereted_person
-from locators.elements_page_locators import TextBoxPageLocators, CheckboxPageLocators
+from locators.elements_page_locators import TextBoxPageLocators, CheckboxPageLocators, RadioBottomPageLocators
 from pages.base_page import BasePage
 
 
@@ -34,7 +34,6 @@ class TextBoxPage(BasePage):
 
 
 class CheckBoxPage(BasePage):
-
     locators = CheckboxPageLocators
 
     def open_full_list(self):
@@ -44,7 +43,7 @@ class CheckBoxPage(BasePage):
         item_list = self.elements_are_visible(self.locators.ITEM_LIST)
         count = 21
         while count != 0:
-            item = item_list[random.randint(1,15)]
+            item = item_list[random.randint(1, 15)]
             if count > 0:
                 self.go_to_element(item)
                 item.click()
@@ -68,6 +67,25 @@ class CheckBoxPage(BasePage):
         return str(data).lower().replace(" ", "")
 
 
+class RadioButtonPage(BasePage):
+    locators = RadioBottomPageLocators
 
+    def click_random_radio_button(self):
+        radio_bottoms_list = self.elements_are_visible(self.locators.RADIO_SELECT)
+        bottom = random.choice(radio_bottoms_list)
+        self.go_to_element(bottom)
+        selected_radio = bottom.text
+        bottom.click()
+        return selected_radio
 
+    def get_radio_bottom_result(self):
+        result = self.element_is_present(self.locators.RADIO_OUTPUT).text
+        return result
 
+    def click_on_radio_button(self, choice):
+        choises = {
+            'yes': self.locators.YES,
+            'impressive': self.locators.IMPRESSIVE,
+            'no': self.locators.NO,
+        }
+        radio = self.element_is_visible(choises[choice]).click()

@@ -1,6 +1,4 @@
-import time
-
-from pages.elements_page import TextBoxPage, CheckBoxPage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage
 
 
 class TestElements:
@@ -12,10 +10,9 @@ class TestElements:
             output_name, output_email, output_cur_addr, output_per_addr = text_box_page.fill_all_fields()
             full_name, email, current_address, permanent_address = text_box_page.check_field_form()
             assert full_name == output_name, "the full name does not match"
-            assert email == output_email,"the email does not match"
+            assert email == output_email, "the email does not match"
             assert current_address == output_cur_addr, "the current address does not match"
             assert permanent_address == output_per_addr, "the permanent address does not match"
-
 
     class TestCheckBox:
         def test_check_box(self, driver):
@@ -29,4 +26,26 @@ class TestElements:
             print(output_result)
             assert input_checkbox == output_result, "checkboxes have not been selected"
 
+    class TestRadioButton:
+        def test_radio_button(self, driver):
+            radio_button_page = RadioButtonPage(driver, 'https://demoqa.com/radio-button')
+            radio_button_page.open()
+            input_radio = radio_button_page.click_random_radio_button()
+            output_radio = radio_button_page.get_radio_bottom_result()
+            print(input_radio)
+            print(output_radio)
+            assert input_radio == output_radio, "radio buttons have not been selected"
+
+        def test_radio_buttons(self, driver):
+            radio_button_page = RadioButtonPage(driver, 'https://demoqa.com/radio-button')
+            radio_button_page.open()
+            radio_button_page.click_on_radio_button('yes')
+            output_yes = radio_button_page.get_radio_bottom_result()
+            radio_button_page.click_on_radio_button('impressive')
+            output_impressive = radio_button_page.get_radio_bottom_result()
+            radio_button_page.click_on_radio_button('no')
+            output_no = radio_button_page.get_radio_bottom_result()
+            assert output_yes == 'Yes', "Yes radio buttons have not been selected"
+            assert output_impressive == 'Impressive', "Impressive radio buttons have not been selected"
+            # assert output_no == 'No', "No radio buttons have not been selected"
 

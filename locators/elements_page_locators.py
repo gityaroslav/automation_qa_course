@@ -21,3 +21,11 @@ class CheckboxPageLocators:
     # TITLE_ITEM = ".//ancestor::span[@class='rct-title']"
     TITLE_ITEM = ".//ancestor::span[@class='rct-text']//span[@class='rct-title']"
     OUTPUT_RESULT = (By.XPATH, '//span[@class="text-success"]')
+
+
+class RadioBottomPageLocators:
+    YES = (By.XPATH, '//label[@for="yesRadio"]')
+    IMPRESSIVE = (By.XPATH, '//label[@for="impressiveRadio"]')
+    NO = (By.XPATH, '//label[@for="noRadio"]')
+    RADIO_SELECT = (By.XPATH, '//label[@class="custom-control-label"]')
+    RADIO_OUTPUT = (By.XPATH, '//span[@class="text-success"]')
