@@ -6,7 +6,7 @@ fake = Faker()
 Faker.seed()
 
 
-def genereted_person():
+def generated_person():
     yield Person(
         full_name=fake.first_name() + " " + fake.last_name(),
         first_name=fake.first_name(),
@@ -19,3 +19,11 @@ def genereted_person():
         permanent_address=fake.address().replace("\n", " "),
 
     )
+
+
+def generated_file():
+    path = rf'C:\Users\Slava\PycharmProjects\automation_qa_course\filetest{random.randint(1, 999)}.txt'
+    file = open(path, 'w+')
+    file.write(f'Hello World{random.randint(1, 999)}')
+    file.close()
+    return file.name, path

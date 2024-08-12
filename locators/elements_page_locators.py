@@ -53,6 +53,7 @@ class WebTablePageLocators:
     #update
     UPDATE_BUTTON = (By.XPATH, '//span[@title="Edit"]')
 
+
 class ButtonsPageLocators:
     DOUBLE_BUTTON = (By.XPATH, '//button[@id="doubleClickBtn"]')
     RIGHT_CLICK_BUTTON = (By.XPATH, '//button[@id="rightClickBtn"]')
@@ -63,7 +64,13 @@ class ButtonsPageLocators:
     SUCCESS_RIGHT_CLICK_BUTTON = (By.XPATH, '//p[@id="rightClickMessage"]')
     SUCCESS_CLICK_ME_BUTTON = (By.XPATH, '//p[@id="dynamicClickMessage"]')
 
+
 class LinksPageLocators:
     SIMPLE_LINK = (By.XPATH, '//a[@id="simpleLink"]')
     BAD_LINK = (By.XPATH, '//a[@id="bad-request"]')
 
+
+class UploadAndDownloadPageLocators:
+    UPLOAD_FILE = (By.XPATH, '//input[@id="uploadFile"]')
+    UPLOADED_RESULT = (By.XPATH, '//p[@id="uploadedFilePath"]')
+    DOWNLOAD_FILE = (By.XPATH, '//a[@id="downloadButton"]')

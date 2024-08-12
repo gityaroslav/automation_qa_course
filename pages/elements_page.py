@@ -1,11 +1,11 @@
+import base64
+import os
 import random
-
 import requests
 from selenium.webdriver.common.by import By
-
-from generator.generator import genereted_person
+from generator.generator import generated_person, generated_file
 from locators.elements_page_locators import TextBoxPageLocators, CheckboxPageLocators, RadioBottomPageLocators, \
-    WebTablePageLocators, ButtonsPageLocators, LinksPageLocators
+    WebTablePageLocators, ButtonsPageLocators, LinksPageLocators, UploadAndDownloadPageLocators
 from pages.base_page import BasePage
 
 
@@ -13,7 +13,7 @@ class TextBoxPage(BasePage):
     locators = TextBoxPageLocators
 
     def fill_all_fields(self):
-        person_info = next(genereted_person())
+        person_info = next(generated_person())
         full_name = person_info.full_name
         email = person_info.email
         current_address = person_info.current_address
@@ -99,7 +99,7 @@ class WebTablePage(BasePage):
     def add_new_person(self):
         count = 1
         while count != 0:
-            person_info = next(genereted_person())
+            person_info = next(generated_person())
             first_name = person_info.first_name
             last_name = person_info.last_name
             email = person_info.email
@@ -135,7 +135,7 @@ class WebTablePage(BasePage):
         return row.text.splitlines()
 
     def update_person_info(self):
-        person_info = next(genereted_person())
+        person_info = next(generated_person())
         age = person_info.age
         self.element_is_visible(self.locators.UPDATE_BUTTON).click()
         self.element_is_visible(self.locators.AGE_INPUT).clear()
@@ -217,3 +217,27 @@ class LinksPage(BasePage):
             bad_link.click()
         else:
             return request.status_code
+
+
+class UploadAndDownloadPage(BasePage):
+    locators = UploadAndDownloadPageLocators
+
+    def upload_file(self):
+        file_name, path = generated_file()
+        self.element_is_present(self.locators.UPLOAD_FILE).send_keys(path)
+        os.remove(path)
+        text = self.element_is_present(self.locators.UPLOADED_RESULT).text
+        return str(text).split("\\")[-1], str(file_name).split("\\")[-1]
+
+
+    def download_file(self):
+        link = self.element_is_present(self.locators.DOWNLOAD_FILE).get_attribute('href')
+        link_b = base64.b64decode(link)
+        path_name_file = rf'C:\Users\Slava\PycharmProjects\automation_qa_course\filetest{random.randint(1, 999)}.jpeg'
+        with open(path_name_file, 'wb+') as f:
+            offset = link_b.find(b'\xff\xd8')
+            f.write(link_b[offset:])
+            check_file = os.path.exists(path_name_file)
+            f.close()
+        os.remove(path_name_file)
+        return check_file
