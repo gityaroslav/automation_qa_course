@@ -1,3 +1,4 @@
+from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -25,9 +26,19 @@ class BasePage:
     def element_is_not_visible(self, locator, timeout=5):
         return WebDriverWait(self.driver, timeout).until(EC.invisibility_of_element_located(locator))
 
-    def elements_is_clickable(self, locator, timeout=5):
+    def element_is_clickable(self, locator, timeout=5):
         return WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable(locator))
 
     def go_to_element(self, element):
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
+
+    def action_double_click(self, element):
+        actions = ActionChains(self.driver)
+        actions.double_click(element)
+        actions.perform()
+
+    def action_right_click(self, element):
+        actions = ActionChains(self.driver)
+        actions.context_click(element)
+        actions.perform()
 
