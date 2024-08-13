@@ -42,3 +42,7 @@ class BasePage:
         actions.context_click(element)
         actions.perform()
 
+    def switch_to_last_window(self):
+        self.driver.switch_to.window(self.driver.window_handles[-1])
+
+
