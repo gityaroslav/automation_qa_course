@@ -129,7 +129,11 @@ class WebTablePage(BasePage):
         return data
 
     def search_some_person(self, key_word):
-        self.element_is_visible(self.locators.SEARCH_INPUT).send_keys(key_word)
+        search_input = self.element_is_visible(self.locators.SEARCH_INPUT)
+        self.go_to_element(search_input)
+        search_input.click()
+        search_input.send_keys(key_word[:3])
+        # self.element_is_visible(self.locators.SEARCH_INPUT).send_keys(key_word)
 
     def check_search_person(self):
         delete_button = self.element_is_present(self.locators.DELETE_BUTTON)
