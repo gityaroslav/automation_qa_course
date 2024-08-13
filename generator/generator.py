@@ -17,6 +17,8 @@ def generated_person():
         email=fake.email(),
         current_address=fake.address().replace("\n", " "),
         permanent_address=fake.address().replace("\n", " "),
+        mobile=fake.msisdn(),
+        date_of_birth=fake.date_between(start_date='-70y', end_date='today').strftime('%d %b %Y'),
 
     )
 
@@ -27,3 +29,4 @@ def generated_file():
     file.write(f'Hello World{random.randint(1, 999)}')
     file.close()
     return file.name, path
+
