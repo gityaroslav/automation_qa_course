@@ -54,4 +54,9 @@ class BasePage:
     def switch_to_default_content(self):
         self.driver.switch_to.default_content()
 
+    def go_to_visible_element(self, locator, timeout=10):
+        element = WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
+        self.go_to_element(element)  # Прокручуємо до елемента
+        return element
+
 
