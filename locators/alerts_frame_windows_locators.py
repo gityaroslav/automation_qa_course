@@ -14,3 +14,10 @@ class AlertsPageLocators:
     CONFIRM_RESULT = (By.XPATH, '//span[@id="confirmResult"]')
     PROMPT_BUTTON = (By.XPATH, '//button[@id="promtButton"]')
     PROMPT_RESULT = (By.XPATH, '//span[@id="promptResult"]')
+
+
+class FramesPageLocators:
+    FRAME1 = (By.XPATH, '//iframe[@id="frame1"]')
+    FRAME2 = (By.XPATH, '//iframe[@id="frame2"]')
+    FRAME_TEXT = (By.XPATH, '//h1[@id="sampleHeading"]')
+

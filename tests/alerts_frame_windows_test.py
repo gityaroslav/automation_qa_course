@@ -1,4 +1,4 @@
-from pages.alerts_frame_windows_page import BrowserWindowsPage, AlertsPage
+from pages.alerts_frame_windows_page import BrowserWindowsPage, AlertsPage, FramesPage
 
 
 class TestAlertsFrameWindows:
@@ -46,4 +46,13 @@ class TestAlertsFrameWindows:
             alert_page.open()
             result_text, name = alert_page.check_prompt_box()
             assert [result_text] == ['You entered ' + name], f"Unexpected text: {result_text}"
+
+    class TestFrames:
+        def test_frame(self, driver):
+            frame_page = FramesPage(driver, 'https://demoqa.com/frames')
+            frame_page.open()
+            frame1 = frame_page.check_frame("frame1")
+            frame2 = frame_page.check_frame("frame2")
+            assert frame1 == ['This is a sample page', '500px', '350px'], 'frame 1 was not opened'
+            assert frame2 == ['This is a sample page', '100px', '100px'], 'frame 2 was not opened'
 
