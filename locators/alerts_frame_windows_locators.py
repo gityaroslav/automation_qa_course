@@ -29,4 +29,14 @@ class NestedFramesPageLocators:
     CHILD_TEXT = (By.TAG_NAME, 'p')
 
 
+class ModalDialogsPageLocators:
+    SMALL_MODAL_BUTTON = (By.XPATH, '//button[@id="showSmallModal"]')
+    CLOSE_SMALL = (By.XPATH, '//button[@id="closeSmallModal"]')
+    SMALL_TEXT = (By.XPATH, '//div[@class="modal-body"]')
+    SMALL_TITLE = (By.XPATH, '//div[@id="example-modal-sizes-title-sm"]')
+
+    LARGE_MODAL_BUTTON = (By.XPATH, '//button[@id="showLargeModal"]')
+    CLOSE_LARGE = (By.XPATH, '//button[@id="closeLargeModal""]')
+    LARGE_TEXT = (By.XPATH, '//div[@class="modal-body"]//p')
+    LARGE_TITLE = (By.XPATH, '//div[@id="example-modal-sizes-title-lg"]')
 
