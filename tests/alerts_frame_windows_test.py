@@ -1,4 +1,4 @@
-from pages.alerts_frame_windows_page import BrowserWindowsPage, AlertsPage, FramesPage
+from pages.alerts_frame_windows_page import BrowserWindowsPage, AlertsPage, FramesPage, NestedFramesPage
 
 
 class TestAlertsFrameWindows:
@@ -56,3 +56,10 @@ class TestAlertsFrameWindows:
             assert frame1 == ['This is a sample page', '500px', '350px'], 'frame 1 was not opened'
             assert frame2 == ['This is a sample page', '100px', '100px'], 'frame 2 was not opened'
 
+    class TestNestedFrames:
+        def test_nested_frame(self, driver):
+            nested_frame_page = NestedFramesPage(driver, 'https://demoqa.com/nestedframes')
+            nested_frame_page.open()
+            parent_text, child_text = nested_frame_page.check_nested_frame()
+            assert parent_text == 'Parent frame', 'incorrect parent text'
+            assert child_text == 'Child Iframe', 'incorrect child text'
