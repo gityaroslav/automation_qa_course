@@ -1,4 +1,6 @@
-from pages.widgets_page import AccordianPage
+import time
+
+from pages.widgets_page import AccordianPage, AutoCompletePage
 
 
 class TestWidgets:
@@ -30,4 +32,40 @@ class TestWidgets:
             assert result1 == ['What is Lorem Ipsum?', 574]
             assert result2 == ['Where does it come from?', 763]
             assert result3 == ['Why do we use it?', 613]
+
+    class TestAutoComplete:
+        def test_multi_autocomplete(self, driver):
+            autocomplete_page = AutoCompletePage(driver, 'https://demoqa.com/auto-complete')
+            autocomplete_page.open()
+            selected_colors = autocomplete_page.check_multiple_autocomplete()
+            colors_result = autocomplete_page.check_selected_colors()
+            assert selected_colors == colors_result, 'colors has been selected incorrectly'
+
+        def test_multi_remove(self, driver):
+            autocomplete_page = AutoCompletePage(driver, 'https://demoqa.com/auto-complete')
+            autocomplete_page.open()
+            autocomplete_page.check_multiple_autocomplete()
+            colors_result = autocomplete_page.check_selected_colors()
+            colors_after = autocomplete_page.remove_color()
+            assert len(colors_result) > len(colors_after), 'colors has not been removed correctly'
+
+        def test_multi_remove_all(self, driver):
+            autocomplete_page = AutoCompletePage(driver, 'https://demoqa.com/auto-complete')
+            autocomplete_page.open()
+            autocomplete_page.check_multiple_autocomplete()
+            autocomplete_page.remove_all()
+            result = autocomplete_page.check_selected_colors()
+            assert result == 'no colors were found', "colors has been removed incorrectly"
+
+        def test_single_autocomplete(self, driver):
+            autocomplete_page = AutoCompletePage(driver, 'https://demoqa.com/auto-complete')
+            autocomplete_page.open()
+            input_color = autocomplete_page.fill_single_color()
+            output_color = autocomplete_page.check_single_color()
+            assert input_color == output_color, 'colors has not match'
+
+
+
+
+
 
