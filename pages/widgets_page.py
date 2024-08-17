@@ -5,7 +5,8 @@ from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver import Keys
 
 from generator.generator import generated_color, generated_date
-from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators
+from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators, \
+    SliderPageLocators, ProgressBarPageLocators
 from pages.base_page import BasePage
 
 
@@ -112,4 +113,25 @@ class DatePickerPage(BasePage):
         return date_value_before, date_value_after
 
 
+class SliderPage(BasePage):
+    locators = SliderPageLocators()
 
+    def change_slider_value(self):
+        slider_value = self.go_to_visible_element(self.locators.SLIDER_VALUE)
+        slider_value_before = slider_value.get_attribute('value')
+        slider_input = self.go_to_visible_element(self.locators.SLIDER_INPUT)
+        self.actions_drag_and_drop_by_offset(slider_input, random.randint(1, 100), 0)
+        slider_value_after = slider_value.get_attribute('value')
+        return slider_value_before, slider_value_after
+
+
+class ProgressBarPage(BasePage):
+    locators = ProgressBarPageLocators()
+
+    def change_progress_bar_value(self):
+        progress_bar_button = self.go_to_visible_element(self.locators.PROGRESS_BAR_BUTTON)
+        progress_bar_button.click()
+        time.sleep(random.randint(2, 7))
+        progress_bar_button.click()
+        value_after = self.element_is_present(self.locators.PROGRESS_BAR_VALUE).text
+        return value_after
