@@ -1,4 +1,4 @@
-from data.data import Person, Color
+from data.data import Person, Color, Date
 from faker import Faker
 import random
 
@@ -34,4 +34,30 @@ def generated_file():
 def generated_color():
     yield Color(
         color_name=["Red", "Blue", "Green", "Yellow", "Purple", "Black", "White", "Voilet", "Indigo", "Magenta", "Aqua"]
+    )
+
+
+def generate_random_time():
+    hours = random.randint(0, 23)
+    minutes = random.choice([0, 15, 30, 45])
+    return f"{hours:02d}:{minutes:02d}"
+
+
+def generate_year_2019_29():
+    years = random.randint(2019, 2029)
+    return str(years)
+
+
+def generate_day():
+    day = random.randint(1, 29)
+    return str(day)
+
+
+def generated_date():
+    yield Date(
+        year=fake.year(),
+        month=fake.month_name(),
+        day=generate_day(),
+        time=generate_random_time(),
+        year_between=generate_year_2019_29(),
     )

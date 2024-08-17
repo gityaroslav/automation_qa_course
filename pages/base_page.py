@@ -1,6 +1,7 @@
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
 
 
 class BasePage:
@@ -58,5 +59,19 @@ class BasePage:
         element = WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
         self.go_to_element(element)  # Прокручуємо до елемента
         return element
+
+    def select_date_by_text(self, element, value):
+        select = Select(self.element_is_present(element))
+        select.select_by_visible_text(value)
+
+    def select_date_item_from_list(self, elements, value):
+        item_list = self.elements_are_present(elements)
+        for item in item_list:
+            if item.text == value:
+                item.click()
+                break
+
+
+
 
 
