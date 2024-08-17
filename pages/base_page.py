@@ -71,6 +71,11 @@ class BasePage:
                 item.click()
                 break
 
+    def actions_drag_and_drop_by_offset(self, element, x, y):
+        actions = ActionChains(self.driver)
+        actions.drag_and_drop_by_offset(element, x, y)
+        actions.perform()
+
 
 
 

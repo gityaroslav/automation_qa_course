@@ -35,3 +35,13 @@ class DatePickerPageLocators:
     DATE_TIME_YEAR = (By.XPATH, '//span[@class="react-datepicker__year-read-view--selected-year"]')
     DATE_TIME_YEAR_LIST = (By.XPATH, '//div[contains(@class, "react-datepicker__year-option")]')
     DATE_TIME_TIME_LIST = (By.XPATH, '//li[@class="react-datepicker__time-list-item "]')
+
+
+class SliderPageLocators:
+    SLIDER_INPUT = (By.XPATH, '//input[@class="range-slider range-slider--primary"]')
+    SLIDER_VALUE = (By.XPATH, '//input[@id="sliderValue"]')
+
+
+class ProgressBarPageLocators:
+    PROGRESS_BAR_BUTTON = (By.XPATH, '//button[@id="startStopButton"]')
+    PROGRESS_BAR_VALUE = (By.XPATH, '//div[@class="progress-bar bg-info"]')
