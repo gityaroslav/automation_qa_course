@@ -4,8 +4,8 @@ import time
 from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver import Keys
 
-from generator.generator import generated_color
-from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators
+from generator.generator import generated_color, generated_date
+from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators
 from pages.base_page import BasePage
 
 
@@ -78,5 +78,38 @@ class AutoCompletePage(BasePage):
     def check_single_color(self):
         selected_color = self.element_is_visible(self.locators.SELECTED_COLOR)
         return selected_color.text
+
+
+class DatePickerPage(BasePage):
+    locators = DatePickerPageLocators()
+
+    def select_random_date(self):
+        date = next(generated_date())
+        input_date = self.go_to_visible_element(self.locators.DATE_INPUT)
+        date_value_before = input_date.get_attribute('value')
+        input_date.click()
+        input_date.clear()
+        self.select_date_by_text(self.locators.DATE_SELECT_MONTH, date.month)
+        self.select_date_by_text(self.locators.DATE_SELECT_YEAR, date.year)
+        self.select_date_item_from_list(self.locators.DATE_SELECT_DAY_LIST, date.day)
+        date_value_after = input_date.get_attribute('value')
+        return date_value_before, date_value_after
+
+    def set_random_date_time(self):
+        date = next(generated_date())
+        input_date = self.go_to_visible_element(self.locators.DATE_TIME_INPUT)
+        date_value_before = input_date.get_attribute('value')
+        input_date.click()
+        input_date.clear()
+        self.element_is_visible(self.locators.DATE_TIME_MONTH).click()
+        self.select_date_item_from_list(self.locators.DATE_TIME_MONTH_LIST, date.month)
+        self.element_is_visible(self.locators.DATE_TIME_YEAR).click()
+        self.select_date_item_from_list(self.locators.DATE_TIME_YEAR_LIST, date.year_between)
+        self.select_date_item_from_list(self.locators.DATE_TIME_DAY_LIST, date.day)
+        self.select_date_item_from_list(self.locators.DATE_TIME_TIME_LIST, date.time)
+        input_date = self.go_to_visible_element(self.locators.DATE_TIME_INPUT)
+        date_value_after = input_date.get_attribute('value')
+        return date_value_before, date_value_after
+
 
 
