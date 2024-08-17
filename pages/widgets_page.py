@@ -1,12 +1,11 @@
 import random
 import time
-
-from selenium.common import NoSuchElementException, TimeoutException
+from selenium.common import TimeoutException
 from selenium.webdriver import Keys
 
 from generator.generator import generated_color, generated_date
 from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators, \
-    SliderPageLocators, ProgressBarPageLocators
+    SliderPageLocators, ProgressBarPageLocators, TabsPageLocators
 from pages.base_page import BasePage
 
 
@@ -17,14 +16,16 @@ class AccordianPage(BasePage):
         if num == "first":
             title_text = self.go_to_visible_element(self.locators.FIRST_SECTION).text
             content = self.go_to_visible_element(self.locators.FIRST_CONTENT).text
-        if num == "second":
+        elif num == "second":
             self.go_to_visible_element(self.locators.SECOND_SECTION).click()
             title_text = self.go_to_visible_element(self.locators.SECOND_SECTION).text
             content = self.element_is_visible(self.locators.SECOND_CONTENT).text
-        if num == "third":
+        elif num == "third":
             self.go_to_visible_element(self.locators.THIRD_SECTION).click()
             title_text = self.go_to_visible_element(self.locators.THIRD_SECTION).text
             content = self.element_is_visible(self.locators.THIRD_CONTENT).text
+        else:
+            raise ValueError("Invalid 'num' value. Please use 'first', 'second', or 'third'.")
         return [title_text, len(content)]
 
 
@@ -135,3 +136,27 @@ class ProgressBarPage(BasePage):
         progress_bar_button.click()
         value_after = self.element_is_present(self.locators.PROGRESS_BAR_VALUE).text
         return value_after
+
+
+class TabsPage(BasePage):
+    locators = TabsPageLocators()
+
+    def check_tabs(self, tab_name):
+        content = ''
+        if tab_name == "what":
+            title = self.go_to_visible_element(self.locators.TABS_WHAT).text
+            content = self.element_is_present(self.locators.TABS_WHAT_CONTENT).text
+        elif tab_name == "origin":
+            self.go_to_visible_element(self.locators.TABS_ORIGIN).click()
+            title = self.go_to_visible_element(self.locators.TABS_ORIGIN).text
+            content = self.element_is_visible(self.locators.TABS_ORIGIN_CONTENT).text
+        elif tab_name == "use":
+            self.go_to_visible_element(self.locators.TABS_USE).click()
+            title = self.go_to_visible_element(self.locators.TABS_USE).text
+            content = self.element_is_visible(self.locators.TABS_USE_CONTENT).text
+        elif tab_name == "more":
+            title = self.element_is_present(self.locators.TABS_MORE).text
+        else:
+            raise ValueError("Invalid 'num' value. Please use 'first', 'second', or 'third'.")
+        return [title, len(content)]
+
