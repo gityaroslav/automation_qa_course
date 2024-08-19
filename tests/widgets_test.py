@@ -1,4 +1,5 @@
-from pages.widgets_page import AccordianPage, AutoCompletePage, DatePickerPage, SliderPage, ProgressBarPage, TabsPage
+from pages.widgets_page import AccordianPage, AutoCompletePage, DatePickerPage, SliderPage, ProgressBarPage, TabsPage, \
+    ToolTipsPage
 
 
 class TestWidgets:
@@ -62,6 +63,7 @@ class TestWidgets:
             output_color = autocomplete_page.check_single_color()
             assert input_color == output_color, 'colors has not match'
 
+    class TestDatePicker:
         def test_date_picker(self, driver):
             date_picker_page = DatePickerPage(driver, 'https://demoqa.com/date-picker')
             date_picker_page.open()
@@ -74,18 +76,21 @@ class TestWidgets:
             before, after = date_picker_page.set_random_date_time()
             assert before != after, 'the date has not been changed'
 
+    class TestSlider:
         def test_slider(self, driver):
             slider_page = SliderPage(driver, 'https://demoqa.com/slider')
             slider_page.open()
             before, after = slider_page.change_slider_value()
             assert before != after, 'the slider has not been changed'
 
+    class TestProgresBar:
         def test_progress_bar(self, driver):
             progress_bar_page = ProgressBarPage(driver, 'https://demoqa.com/progress-bar')
             progress_bar_page.open()
             value = progress_bar_page.change_progress_bar_value()
             assert value > "0", 'progress bar has not been changed'
 
+    class TestTabs:
         def test_tabs(self, driver):
             tabs_page = TabsPage(driver, 'https://demoqa.com/tabs')
             tabs_page.open()
@@ -97,5 +102,16 @@ class TestWidgets:
             assert origin_tab == ['Origin', 763], 'the tab "origin" has not been selected'
             assert use_tab == ['Use', 613], 'the tab "use" has not been selected'
             assert more_tab == ['More', 0], 'the tab "more" has not been selected'
+
+    class TestToolTips:
+
+        def test_tool_tips(self, driver):
+            tool_tips_page = ToolTipsPage(driver, 'https://demoqa.com/tool-tips')
+            tool_tips_page.open()
+            button_text, field_text, contrary_text, section_text = tool_tips_page.check_tool_tips()
+            assert button_text == 'You hovered over the Button', 'You do not hovered over the Button'
+            assert field_text == 'You hovered over the text field', 'You do not hovered over the text field'
+            assert contrary_text == 'You hovered over the Contrary', 'You do not hovered over the Contrary'
+            assert section_text == 'You hovered over the 1.10.32', 'You do not hovered over the 1.10.32'
 
 

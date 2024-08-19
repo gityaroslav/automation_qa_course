@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -75,6 +77,17 @@ class BasePage:
         actions = ActionChains(self.driver)
         actions.drag_and_drop_by_offset(element, x, y)
         actions.perform()
+
+    def actions_move_to_element(self, element):
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+
+    def ensure_element_focused(self, element):
+        if not element == self.driver.switch_to.active_element:
+            self.actions_move_to_element(element)
+
+
+
 
 
 
