@@ -5,7 +5,7 @@ from selenium.webdriver import Keys
 
 from generator.generator import generated_color, generated_date
 from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators, \
-    SliderPageLocators, ProgressBarPageLocators, TabsPageLocators
+    SliderPageLocators, ProgressBarPageLocators, TabsPageLocators, ToolTipsPageLocators
 from pages.base_page import BasePage
 
 
@@ -160,3 +160,23 @@ class TabsPage(BasePage):
             raise ValueError("Invalid 'num' value. Please use 'first', 'second', or 'third'.")
         return [title, len(content)]
 
+
+class ToolTipsPage(BasePage):
+    locators = ToolTipsPageLocators()
+
+    def get_text_from_tool_tips(self, hover_el, wait_el):
+        element = self.element_is_present(hover_el)
+        self.go_to_element(element)
+        self.actions_move_to_element(element)
+        self.ensure_element_focused(element)
+        self.element_is_visible(wait_el)
+        tool_tip_text = self.go_to_visible_element(self.locators.RESULT)
+        text = tool_tip_text.text
+        return text
+
+    def check_tool_tips(self):
+        tool_tip_text_button = self.get_text_from_tool_tips(self.locators.BUTTON, self.locators.TOOLTIP_BUTTON)
+        tool_tip_text_field = self.get_text_from_tool_tips(self.locators.FIELD, self.locators.TOOLTIP_FIELD)
+        tool_tip_text_contrary = self.get_text_from_tool_tips(self.locators.CONTRARY_LINK, self.locators.TOOLTIP_CONTRARY)
+        tool_tip_text_section = self.get_text_from_tool_tips(self.locators.SECTION_LINK, self.locators.TOOLTIP_SECTION)
+        return tool_tip_text_button, tool_tip_text_field, tool_tip_text_contrary, tool_tip_text_section
