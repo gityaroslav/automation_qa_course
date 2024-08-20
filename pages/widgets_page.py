@@ -2,11 +2,12 @@ import random
 import time
 from selenium.common import TimeoutException
 from selenium.webdriver import Keys
-
 from generator.generator import generated_color, generated_date
 from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators, \
-    SliderPageLocators, ProgressBarPageLocators, TabsPageLocators, ToolTipsPageLocators
+    SliderPageLocators, ProgressBarPageLocators, TabsPageLocators, ToolTipsPageLocators, MenuPageLocators, \
+    SelectMenuPageLocators
 from pages.base_page import BasePage
+from selenium.webdriver.support.ui import Select
 
 
 class AccordianPage(BasePage):
@@ -177,6 +178,71 @@ class ToolTipsPage(BasePage):
     def check_tool_tips(self):
         tool_tip_text_button = self.get_text_from_tool_tips(self.locators.BUTTON, self.locators.TOOLTIP_BUTTON)
         tool_tip_text_field = self.get_text_from_tool_tips(self.locators.FIELD, self.locators.TOOLTIP_FIELD)
-        tool_tip_text_contrary = self.get_text_from_tool_tips(self.locators.CONTRARY_LINK, self.locators.TOOLTIP_CONTRARY)
+        tool_tip_text_contrary = self.get_text_from_tool_tips(self.locators.CONTRARY_LINK,
+                                                              self.locators.TOOLTIP_CONTRARY)
         tool_tip_text_section = self.get_text_from_tool_tips(self.locators.SECTION_LINK, self.locators.TOOLTIP_SECTION)
         return tool_tip_text_button, tool_tip_text_field, tool_tip_text_contrary, tool_tip_text_section
+
+
+class MenuPage(BasePage):
+    locators = MenuPageLocators()
+
+    def check_menu(self):
+        menu_elements_list = self.elements_are_present(self.locators.MENU_ITEM_LIST)
+        data = []
+        for item in menu_elements_list:
+            self.go_to_element(item)
+            self.actions_move_to_element(item)
+            self.ensure_element_focused(item)
+            data.append(item.text)
+        return data
+
+
+class SelectMenuPage(BasePage):
+    locators = SelectMenuPageLocators()
+
+    def select_random_value(self):
+        drop = self.go_to_visible_element(self.locators.SELECT_VALUE)
+        drop.click()
+        input_field = self.element_is_visible(self.locators.VALUE_INPUT)
+        for i in range(random.randint(2, 5)):
+            input_field.send_keys(Keys.ARROW_DOWN)
+        input_field.send_keys(Keys.ENTER)
+        selected_value = self.element_is_present(self.locators.SELECT_VALUE_RESULT).text
+        return selected_value
+
+
+    def select_one_random(self):
+        elements = ['Dr.', 'Mr.', 'Mrs.', 'Ms.', 'Prof.', 'Other']
+        random_element = random.choice(elements)
+        element_field = self.go_to_visible_element(self.locators.SELECT_ONE)
+        element_field.send_keys(random_element)
+        element_field.send_keys(Keys.ENTER)
+        result = self.element_is_present(self.locators.SELECT_ONE_RESULT).text
+        return random_element, result
+
+    def check_color_old(self):
+        color_before = self.get_first_selected_option(self.locators.OLD_SELECT)
+        selected_color = self.select_random_option_from_dropdown(self.locators.OLD_SELECT)
+        return color_before, selected_color
+
+    def check_multi_color(self):
+        colors = ['Red', 'Blue', 'Black', 'Green']
+        random_count = random.randint(1, len(colors))
+        random_subjects = random.sample(colors, random_count)
+        color_input = self.go_to_visible_element(self.locators.MULTI_DROP_DOWN)
+        data = []
+        for item in random_subjects:
+            color_input.send_keys(item)
+            color_input.send_keys(Keys.ENTER)
+            data.append(item)
+        time.sleep(2)
+        result = []
+        result_list = self.elements_are_present(self.locators.MULTI_RESULT_LIST)
+        for item in result_list:
+            result.append(item.text)
+        return data, result
+
+    def select_random_cars(self):
+        selected_car = self.select_random_option_from_dropdown(self.locators.CARS_SELECT)
+        return selected_car

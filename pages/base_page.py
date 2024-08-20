@@ -1,5 +1,5 @@
 import time
-
+import random
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -80,14 +80,33 @@ class BasePage:
 
     def actions_move_to_element(self, element):
         actions = ActionChains(self.driver)
-        actions.move_to_element(element).perform()
+        actions.move_to_element(element)
+        actions.perform()
 
     def ensure_element_focused(self, element):
         if not element == self.driver.switch_to.active_element:
             self.actions_move_to_element(element)
 
+    def select_random_option(self, element):
+        selected_element = self.go_to_visible_element(element)
+        select = Select(selected_element)
+        all_options = select.options
+        random_option = random.choice(all_options)
+        select.select_by_visible_text(random_option.text)
+        return random_option.text
 
+    def select_random_option_from_dropdown(self, dropdown_locator):
+        dropdown_element = self.element_is_visible(dropdown_locator)
+        select = Select(dropdown_element)
+        options = select.options
+        random_index = random.randint(0, len(options) - 1)
+        select.select_by_index(random_index)
+        return options[random_index].text
 
+    def get_first_selected_option(self, dropdown_locator):
+        dropdown_element = self.element_is_visible(dropdown_locator)
+        select = Select(dropdown_element)
+        return select.first_selected_option.text
 
 
 
