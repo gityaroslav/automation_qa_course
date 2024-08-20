@@ -1,6 +1,5 @@
-import time
 import random
-from selenium.webdriver import ActionChains
+from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
@@ -59,7 +58,7 @@ class BasePage:
 
     def go_to_visible_element(self, locator, timeout=10):
         element = WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
-        self.go_to_element(element)  # Прокручуємо до елемента
+        self.go_to_element(element)
         return element
 
     def select_date_by_text(self, element, value):
@@ -130,7 +129,22 @@ class BasePage:
         order_after = self.get_sortable_items(items)
         return order_before, order_after
 
+    def random_elements_from_list(self, locator):
+        elements_list = self.elements_are_visible(locator)
+        random_count = random.randint(1, len(elements_list))
+        return random.sample(elements_list, random_count)
 
+    def actions_click_selected_elements(self, elements):
+        actions = ActionChains(self.driver)
+        actions.key_down(Keys.CONTROL)
+        for item in elements:
+            item.click()
+        actions.perform()
 
-
+    def check_selected_items(self, list_or_locator):
+        data = []
+        el_list = list_or_locator
+        for element in el_list:
+            data.append(element.text)
+        return data
 
