@@ -78,6 +78,11 @@ class BasePage:
         actions.drag_and_drop_by_offset(element, x, y)
         actions.perform()
 
+    def actions_drag_and_drop_to_element(self, what, where):
+        actions = ActionChains(self.driver)
+        actions.drag_and_drop(what, where)
+        actions.perform()
+
     def actions_move_to_element(self, element):
         actions = ActionChains(self.driver)
         actions.move_to_element(element)
@@ -107,6 +112,23 @@ class BasePage:
         dropdown_element = self.element_is_visible(dropdown_locator)
         select = Select(dropdown_element)
         return select.first_selected_option.text
+
+    def get_sortable_items(self, elements):
+        item_list = self.elements_are_visible(elements)
+        return [item.text for item in item_list]
+
+    def change_elements_order(self, elements_list, items):
+        self.go_to_visible_element(elements_list).click()
+        order_before = self.get_sortable_items(items)
+        item_list = self.elements_are_visible(items)
+        for _ in range(3):
+            item_what = item_list[random.randint(0, len(item_list) - 1)]
+            item_where = item_list[random.randint(0, len(item_list) - 1)]
+            if item_what != item_where:
+                self.go_to_element(item_what)
+                self.actions_drag_and_drop_to_element(item_what, item_where)
+        order_after = self.get_sortable_items(items)
+        return order_before, order_after
 
 
 
