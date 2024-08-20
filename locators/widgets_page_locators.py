@@ -69,3 +69,19 @@ class ToolTipsPageLocators:
     RESULT = (By.XPATH, '//div[@class="tooltip-inner"]')
 
 
+class MenuPageLocators:
+    MENU_ITEM_LIST = (By.XPATH, '//ul[@id="nav"]//a')
+
+
+class SelectMenuPageLocators:
+    SELECT_VALUE = (By.XPATH, '(//div[@class=" css-tlfecz-indicatorContainer"])[1]')
+    VALUE_INPUT = (By.XPATH, '//input[@id="react-select-2-input"]')
+    SELECT_VALUE_RESULT = (By.XPATH, '//div[@id="withOptGroup"]//div[contains(@class, "singleValue")]')
+    SELECT_ONE = (By.XPATH, '//input[@id="react-select-3-input"]')
+    SELECT_ONE_RESULT = (By.XPATH, '//div[@id="selectOne"]//div[@class=" css-1uccc91-singleValue"]')
+    OLD_SELECT = (By.XPATH, '//select[@id="oldSelectMenu"]')
+    MULTI_DROP_DOWN = (By.XPATH, '//input[@id="react-select-4-input"]')
+    MULTI_RESULT_LIST = (By.XPATH, '//div[@class="css-12jo7m5"]')
+    CARS_SELECT = (By.XPATH, '//select[@id="cars"]')
+
+

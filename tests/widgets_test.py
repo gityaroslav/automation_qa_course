@@ -1,5 +1,5 @@
 from pages.widgets_page import AccordianPage, AutoCompletePage, DatePickerPage, SliderPage, ProgressBarPage, TabsPage, \
-    ToolTipsPage
+    ToolTipsPage, MenuPage, SelectMenuPage
 
 
 class TestWidgets:
@@ -114,4 +114,43 @@ class TestWidgets:
             assert contrary_text == 'You hovered over the Contrary', 'You do not hovered over the Contrary'
             assert section_text == 'You hovered over the 1.10.32', 'You do not hovered over the 1.10.32'
 
+    class TestMenu:
 
+        def test_menu_items(self, driver):
+            menu_page = MenuPage(driver, 'https://demoqa.com/menu#')
+            menu_page.open()
+            data = menu_page.check_menu()
+            assert data == ['Main Item 1', 'Main Item 2', 'Sub Item', 'Sub Item', 'SUB SUB LIST »', 'Sub Sub Item 1',
+                            'Sub Sub Item 2', 'Main Item 3'], 'one or more items has not been selected'
+
+    class TestSelectMenu:
+
+        def test_select_value(self, driver):
+            select_menu_page = SelectMenuPage(driver, 'https://demoqa.com/select-menu')
+            select_menu_page.open()
+            selected_value = select_menu_page.select_random_value()
+            assert len(selected_value) > 0, 'the value has not been selected'
+
+        def test_select_one(self, driver):
+            select_menu_page = SelectMenuPage(driver, 'https://demoqa.com/select-menu')
+            select_menu_page.open()
+            selected_one, result = select_menu_page.select_one_random()
+            assert selected_one == result, 'one item has not been selected correctly'
+
+        def test_old_select(self, driver):
+            select_menu_page = SelectMenuPage(driver, 'https://demoqa.com/select-menu')
+            select_menu_page.open()
+            before, after = select_menu_page.check_color_old()
+            assert before != after, 'the color has not been changed'
+
+        def test_multi_dropdown(self, driver):
+            select_menu_page = SelectMenuPage(driver, 'https://demoqa.com/select-menu')
+            select_menu_page.open()
+            selected_colors, result = select_menu_page.check_multi_color()
+            assert selected_colors == result, 'multi color has not been selected properly'
+
+        def test_car_select(self, driver):
+            select_menu_page = SelectMenuPage(driver, 'https://demoqa.com/select-menu')
+            select_menu_page.open()
+            selected_car = select_menu_page.select_random_cars()
+            assert selected_car in ["Volvo", "Saab", "Opel", "Audi"], 'car has not been selected'
