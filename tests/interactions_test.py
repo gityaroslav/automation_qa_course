@@ -1,4 +1,4 @@
-from pages.interactions_page import SortablePage, SelectablePage, ResizablePage
+from pages.interactions_page import SortablePage, SelectablePage, ResizablePage, DroppablePage
 
 
 class TestInteractions:
@@ -34,3 +34,38 @@ class TestInteractions:
             assert max_box == ('500px', '300px')
             assert min_box == ('150px', '150px')
             assert min_resizeable != max_resizeable
+
+    class TestDroppable:
+
+        def test_simple_droppable(self, driver):
+            droppable_page = DroppablePage(driver, 'https://demoqa.com/droppable')
+            droppable_page.open()
+            text = droppable_page.drop_simple()
+            assert text == 'Dropped!', 'the element has not been dropped'
+
+        def test_accept_droppable(self, driver):
+            droppable_page = DroppablePage(driver, 'https://demoqa.com/droppable')
+            droppable_page.open()
+            not_accept, accept = droppable_page.drop_accept()
+            assert not_accept == 'Drop here', 'the dropped element has been accepted'
+            assert accept == 'Dropped!', 'the dropped element has not been accepted'
+
+        def test_prevent_droppable(self, driver):
+            droppable_page = DroppablePage(driver, 'https://demoqa.com/droppable')
+            droppable_page.open()
+            not_greedy, greedy_inner, greedy_outer = droppable_page.drop_prevent()
+            assert not_greedy.replace('\n', ' ') == 'Dropped! Dropped!', ('the element has not been dropped to not '
+                                                                          'greedy container')
+            assert greedy_inner.replace('\n', ' ') == 'Outer droppable Dropped!', ('the element has not been dropped '
+                                                                                   'to not greedy inner container')
+            assert greedy_outer.replace('\n', ' ') == 'Dropped! Dropped!', ('the element has not been dropped to not '
+                                                                            'greedy outer container after inner not '
+                                                                            'greedy container')
+
+        def test_revert_droppable(self, driver):
+            droppable_page = DroppablePage(driver, 'https://demoqa.com/droppable')
+            droppable_page.open()
+            will_after_move, will_after_revert = droppable_page.drop_revert('will_revert')
+            will_not_after_move, will_not_after_revert = droppable_page.drop_revert('will_not_revert')
+            assert will_after_move != will_after_revert, 'the element has not revert'
+            assert will_not_after_move == will_not_after_revert, 'the element has reverted'
