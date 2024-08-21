@@ -15,3 +15,11 @@ class SelectablePageLocators:
     TAB_GREED = (By.XPATH, '//a[@id="demo-tab-grid"]')
     GREED_ITEM = (By.XPATH, '//div[@id="gridContainer"]//li')
     GREED_RESULT = (By.XPATH, '//div[@id="gridContainer"]//li[contains(@class, "active")]')
+
+
+class ResizablePageLocators:
+    TITLE = (By.XPATH, '//h1[text()="Resizable"]')
+    RESIZEABLE_BOX = (By.XPATH, '//div[@id="resizableBoxWithRestriction"]')
+    RESIZEABLE_BOX_HANDLE = (By.XPATH, '//div[@id="resizableBoxWithRestriction"]/span')
+    RESIZEABLE = (By.XPATH, '//div[@id="resizable"]')
+    RESIZEABLE_HANDLE = (By.XPATH, '//div[@id="resizable"]/span')
