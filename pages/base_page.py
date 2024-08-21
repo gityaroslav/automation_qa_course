@@ -1,6 +1,9 @@
+import time
+import random
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
 
 
 class BasePage:
@@ -41,4 +44,93 @@ class BasePage:
         actions = ActionChains(self.driver)
         actions.context_click(element)
         actions.perform()
+
+    def switch_to_last_window(self):
+        self.driver.switch_to.window(self.driver.window_handles[-1])
+
+    def switch_to_alert(self):
+        return self.driver.switch_to.alert
+
+    def switch_to_frame(self, index):
+        self.driver.switch_to.frame(index)
+
+    def switch_to_default_content(self):
+        self.driver.switch_to.default_content()
+
+    def go_to_visible_element(self, locator, timeout=10):
+        element = WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
+        self.go_to_element(element)  # Прокручуємо до елемента
+        return element
+
+    def select_date_by_text(self, element, value):
+        select = Select(self.element_is_present(element))
+        select.select_by_visible_text(value)
+
+    def select_date_item_from_list(self, elements, value):
+        item_list = self.elements_are_present(elements)
+        for item in item_list:
+            if item.text == value:
+                item.click()
+                break
+
+    def actions_drag_and_drop_by_offset(self, element, x, y):
+        actions = ActionChains(self.driver)
+        actions.drag_and_drop_by_offset(element, x, y)
+        actions.perform()
+
+    def actions_drag_and_drop_to_element(self, what, where):
+        actions = ActionChains(self.driver)
+        actions.drag_and_drop(what, where)
+        actions.perform()
+
+    def actions_move_to_element(self, element):
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element)
+        actions.perform()
+
+    def ensure_element_focused(self, element):
+        if not element == self.driver.switch_to.active_element:
+            self.actions_move_to_element(element)
+
+    def select_random_option(self, element):
+        selected_element = self.go_to_visible_element(element)
+        select = Select(selected_element)
+        all_options = select.options
+        random_option = random.choice(all_options)
+        select.select_by_visible_text(random_option.text)
+        return random_option.text
+
+    def select_random_option_from_dropdown(self, dropdown_locator):
+        dropdown_element = self.element_is_visible(dropdown_locator)
+        select = Select(dropdown_element)
+        options = select.options
+        random_index = random.randint(0, len(options) - 1)
+        select.select_by_index(random_index)
+        return options[random_index].text
+
+    def get_first_selected_option(self, dropdown_locator):
+        dropdown_element = self.element_is_visible(dropdown_locator)
+        select = Select(dropdown_element)
+        return select.first_selected_option.text
+
+    def get_sortable_items(self, elements):
+        item_list = self.elements_are_visible(elements)
+        return [item.text for item in item_list]
+
+    def change_elements_order(self, elements_list, items):
+        self.go_to_visible_element(elements_list).click()
+        order_before = self.get_sortable_items(items)
+        item_list = self.elements_are_visible(items)
+        for _ in range(3):
+            item_what = item_list[random.randint(0, len(item_list) - 1)]
+            item_where = item_list[random.randint(0, len(item_list) - 1)]
+            if item_what != item_where:
+                self.go_to_element(item_what)
+                self.actions_drag_and_drop_to_element(item_what, item_where)
+        order_after = self.get_sortable_items(items)
+        return order_before, order_after
+
+
+
+
 
