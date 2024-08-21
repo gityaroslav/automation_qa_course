@@ -1,5 +1,6 @@
 import random
 from selenium.webdriver import ActionChains, Keys
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
@@ -147,4 +148,3 @@ class BasePage:
         for element in el_list:
             data.append(element.text)
         return data
-

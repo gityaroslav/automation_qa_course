@@ -1,4 +1,4 @@
-from pages.interactions_page import SortablePage, SelectablePage
+from pages.interactions_page import SortablePage, SelectablePage, ResizablePage
 
 
 class TestInteractions:
@@ -24,4 +24,14 @@ class TestInteractions:
             assert sorted(selected_list_items) == sorted(
                 list_result), 'the list elements has not been selected correctly'
 
+    class TestResizable:
+
+        def test_resizable(self, driver):
+            resizable_page = ResizablePage(driver, 'https://demoqa.com/resizable')
+            resizable_page.open()
+            max_box, min_box = resizable_page.change_size_resizeable_box()
+            max_resizeable, min_resizeable = resizable_page.change_size_resizeable()
+            assert max_box == ('500px', '300px')
+            assert min_box == ('150px', '150px')
+            assert min_resizeable != max_resizeable
 

@@ -80,3 +80,11 @@ class DynamicPropertiesPageLocators:
     ENABLE_AFTER_BUTTON = (By.XPATH, '//button[@id="enableAfter"]')
     COLLOR_CHANGE_BUTTON = (By.XPATH, '//button[@id="colorChange"]')
     VISIBLE_AFTER_BUTTON = (By.XPATH, '//button[@id="visibleAfter"]')
+
+
+class ResizablePageLocators:
+    TITLE = (By.XPATH, '//h1[text()="Resizable"]')
+    RESIZEABLE_BOX = (By.XPATH, '//div[@id="resizableBoxWithRestriction"]')
+    RESIZEABLE_BOX_HANDLE = (By.XPATH, '//div[@id="resizableBoxWithRestriction"]/span')
+    RESIZEABLE = (By.XPATH, '//div[@id="resizable"]')
+    RESIZEABLE_HANDLE = (By.XPATH, '//div[@id="resizable"]/span')
