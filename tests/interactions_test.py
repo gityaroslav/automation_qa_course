@@ -1,4 +1,4 @@
-from pages.interactions_page import SortablePage, SelectablePage, ResizablePage, DroppablePage
+from pages.interactions_page import SortablePage, SelectablePage, ResizablePage, DroppablePage, DraggablePage
 
 
 class TestInteractions:
@@ -69,3 +69,30 @@ class TestInteractions:
             will_not_after_move, will_not_after_revert = droppable_page.drop_revert('will_not_revert')
             assert will_after_move != will_after_revert, 'the element has not revert'
             assert will_not_after_move == will_not_after_revert, 'the element has reverted'
+
+    class TestDraggable:
+        def test_simple_draggable(self, driver):
+            draggable_page = DraggablePage(driver, 'https://demoqa.com/dragabble')
+            draggable_page.open()
+            position_before, position_after = draggable_page.simple_drag_box()
+            assert position_before != position_after, 'the element position not been changed'
+
+        def test_axis_draggable(self, driver):
+            draggable_page = DraggablePage(driver, 'https://demoqa.com/dragabble')
+            draggable_page.open()
+            left_x_before, top_x_before, left_x_after, top_x_after = draggable_page.axis_drag_box("only_x")
+            left_y_before, top_y_before, left_y_after, top_y_after = draggable_page.axis_drag_box("only_y")
+            assert left_x_before != left_x_after and top_x_before == top_x_after, ('the position by x has not changed '
+                                                                                   'or position by y has changed')
+            assert left_y_before == left_y_after and top_y_before != top_y_after, ('the position by y has not changed '
+                                                                                   'or position by x has not changed')
+
+        def test_container_restricted(self, driver):
+            draggable_page = DraggablePage(driver, 'https://demoqa.com/dragabble')
+            draggable_page.open()
+            initial_position, final_position, width_position, height_position = draggable_page.container_restricted()
+            assert final_position['x'] <= width_position, "Element moved out of the right container boundary"
+            assert final_position['y'] <= height_position, "Element moved out of the bottom container boundary"
+
+
+

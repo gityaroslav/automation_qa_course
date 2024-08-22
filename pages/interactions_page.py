@@ -1,7 +1,7 @@
 import time
 
 from locators.interactions_page_locators import SortablePageLocators, SelectablePageLocators, ResizablePageLocators, \
-    DroppablePageLocators
+    DroppablePageLocators, DraggablePageLocators
 from pages.base_page import BasePage
 import random
 
@@ -108,37 +108,6 @@ class DroppablePage(BasePage):
         text_greedy_outer = outer_greedy.text
         return text_not_greedy, text_greedy_inner, text_greedy_outer
 
-    # def drop_revert(self, type_drag):
-    #     self.element_is_visible(self.locators.REVERT_TAB).click()
-    #     revert = self.go_to_visible_element(self.locators.WILL_REVERT)
-    #     not_revert = self.go_to_visible_element(self.locators.NOT_REVERT)
-    #     drop_div = self.go_to_visible_element(self.locators.DROP_ME_REVERT)
-    #     if type_drag == "revert":
-    #         self.actions_drag_and_drop_to_element(revert, drop_div)
-    #         position_after_move = revert.get_attribute('style')
-    #         time.sleep(1)
-    #         position_after_revert = revert.get_attribute('style')
-    #     if type_drag == "not_revert":
-    #         self.actions_drag_and_drop_to_element(not_revert, drop_div)
-    #         position_after_move = not_revert.get_attribute('style')
-    #         time.sleep(1)
-    #         position_after_revert = not_revert.get_attribute('style')
-    #     return position_after_move, position_after_revert
-
-    # def drop_revert(self, type_drag):
-    #     drags = {
-    #         'will_revert': {'revert': self.locators.WILL_REVERT},
-    #         'will_not_revert': {'revert': self.locators.NOT_REVERT},
-    #     }
-    #     self.element_is_visible(self.locators.REVERT_TAB).click()
-    #     element = self.go_to_visible_element(drags[type_drag]['revert'])
-    #     drop_div = self.go_to_visible_element(self.locators.DROP_ME_REVERT)
-    #     self.actions_drag_and_drop_to_element(element, drop_div)
-    #     position_after_move = element.get_attribute('style')
-    #     time.sleep(2)
-    #     position_after_revert = element.get_attribute('style')
-    #     return position_after_move, position_after_revert
-
     def drop_revert(self, type_drag):
         drags = {
             'will_revert': self.locators.WILL_REVERT,
@@ -152,6 +121,51 @@ class DroppablePage(BasePage):
         time.sleep(2)
         position_after_revert = element.get_attribute('style')
         return position_after_move, position_after_revert
+
+
+class DraggablePage(BasePage):
+    locators = DraggablePageLocators()
+
+    def get_positions_before_after(self, drag_element):
+        self.actions_drag_and_drop_by_offset(drag_element, random.randint(-10, 40), random.randint(-10, 30))
+        position_before = drag_element.get_attribute('style')
+        self.actions_drag_and_drop_by_offset(drag_element, random.randint(-10, 40), random.randint(-10, 30))
+        position_after = drag_element.get_attribute('style')
+        return position_before, position_after
+
+    def simple_drag_box(self):
+        self.element_is_visible(self.locators.SIMPLE_TAB).click()
+        drag_div = self.go_to_visible_element(self.locators.DRAG_ME)
+        position_before, position_after = self.get_positions_before_after(drag_div)
+        return position_before, position_after
+
+    def axis_drag_box(self, element):
+        drags = {
+            "only_x": self.locators.DRAG_X,
+            "only_y": self.locators.DRAG_Y,
+        }
+        self.element_is_visible(self.locators.AXIS_TAB).click()
+        drag_div = self.go_to_visible_element(drags[element])
+        position_before, position_after = self.get_positions_before_after(drag_div)
+        left_before = int(position_before.split('left: ')[1].split('px')[0])
+        top_before = int(position_before.split('top: ')[1].split('px')[0])
+        left_after = int(position_after.split('left: ')[1].split('px')[0])
+        top_after = int(position_after.split('top: ')[1].split('px')[0])
+        return left_before, top_before, left_after, top_after
+
+    def container_restricted(self):
+        self.element_is_visible(self.locators.RESTRICTED_TAB).click()
+        restricted_element = self.go_to_visible_element(self.locators.RESTRICTED_EL)
+        inner_box = self.go_to_visible_element(self.locators.INNER_BOX)
+        container_size = restricted_element.size
+        initial_position = inner_box.location
+        box_size = inner_box.size
+        self.actions_drag_and_drop_by_offset(inner_box, container_size['width'] - box_size['width'],
+                                             container_size['height'] - box_size['height'])
+        final_position = inner_box.location
+        width_position = initial_position['x'] + container_size['width'] - inner_box.size['width']
+        height_position = initial_position['y'] + container_size['height'] - inner_box.size['height']
+        return initial_position, final_position, width_position, height_position
 
 
 
